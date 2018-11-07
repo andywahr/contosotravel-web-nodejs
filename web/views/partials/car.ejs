@@ -1,0 +1,18 @@
+<%{ var days = Math.floor(NumberOfDays); var hours = (NumberOfDays * 24) - Math.ceil(days * 24); } %>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title float-left">
+            <%= car.CarType %> - Total Cost: $<%= (car.Cost * NumberOfDays).toFixed(2) %> ($<%= car.Cost.toFixed(2) %>/Day)
+        </h5>
+    <% if (ShowPurchase) { %>
+        <label class="btn btn-primary input-group-btn float-right">
+            <input type="radio" id="SelectedCar" name="SelectedCar" value="<%= car.id %>">Purchase
+        </label>
+    <% } %>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Pick-Up and Drop-Off Location: <%= car.LocationAirport.AirportName %> (<%= car.Location %>)</h5>
+        <h5 class="card-title">Total Duration: <%= days %> days <%= hours %> hrs</h5>
+    </div>
+</div>

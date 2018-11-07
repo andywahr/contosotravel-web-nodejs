@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/head', { title : 'Itinerary' }) %>
+    <body>
+        <% include ../partials/body %>
+<% if ( itinerary == undefined ) { %>
+    <h2>Our gnomes are working hard on your order!!!  Check back later....</h2>
+<% } else { %>
+
+    <% { var totalCost = 0; } %>
+    <% { if ( itinerary.DepartingFlight != undefined ) totalCost += itinerary.DepartingFlight.Cost; } %>
+    <% { if ( itinerary.ReturningFlight != undefined ) totalCost += itinerary.ReturningFlight.Cost; } %>
+    <% { if ( itinerary.CarReservation != undefined ) totalCost += (itinerary.CarReservation.Cost * itinerary.CarReservationDuration); } %>
+    <% { if ( itinerary.HotelReservation != undefined ) totalCost += (itinerary.HotelReservation.Cost * itinerary.HotelReservationDuration); } %>
+
+<h2>Record Locator: <%= itinerary.RecordLocator %></h2>
+<h2>Cart Total: $<%= totalCost.toFixed(2) %></h2>
+<% } %>
+
+<%- include('../partials/cart', { cart: itinerary }) %>
+
+<% include ../partials/footer %>
+</body>
+</html>
+
+

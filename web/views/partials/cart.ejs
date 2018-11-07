@@ -1,0 +1,19 @@
+<% if ( cart.DepartingFlight != undefined ) { %>
+    <h2>Departing Flight</h2>
+    <%- include('../partials/flight', { SelectedFlightName : 'SelectedDepartingFlight', ShowPurchase: false, flight: cart.DepartingFlight }) %>
+<% } %>
+
+<% if ( cart.ReturningFlight != undefined ) { %>
+    <h2>Returning Flight</h2>
+    <%- include('../partials/flight', { SelectedFlightName : 'SelectedReturningFlight', ShowPurchase: false, flight: cart.ReturningFlight }) %>
+<% } %>
+
+<% if ( cart.HotelReservation != undefined ) { %>
+    <h2>Hotel Reservation</h2>
+    <%- include('../partials/hotel', { NumberOfDays : cart.HotelReservationDuration, ShowPurchase: false, hotel: cart.HotelReservation }) %>
+<% } %>
+
+<% if ( cart.CarReservation != undefined ) { %>
+    <h2>Car Reservation</h2>
+    <%- include('../partials/car', { NumberOfDays : cart.CarReservationDuration, ShowPurchase: false, car: cart.CarReservation }) %>
+<% } %>

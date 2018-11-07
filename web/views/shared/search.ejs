@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/head', {title : 'Find Flights'}) %>
+    <body>
+        <% include ../partials/body %>
+
+        <h4>Search For <%= search.SearchMode %></h4>
+        <hr />
+        <div class="form-row align-items-center">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </div>
+        
+        <form action="/<%= search.SearchMode %>/Search" class="form-inline" method="POST">
+            <input asp-for="StartLocation" name="StartLocation" class="form-control col-sm-2" placeholder="<%= search.StartLocationLabel %>" list="airPorts" />
+            <% if (search.IncludeEndLocation) { %>
+                <input asp-for="EndLocation" name="EndLocation" class="form-control col-sm-2" placeholder="<%= search.EndLocationLabel %>" list="airPorts" />
+            <% } %>
+            <datalist id="airPorts">
+                <% search.AirPorts.forEach(function(airport) { %>
+                    <option value="<%= airport.id %>"><%= airport.AirportName %></option>
+                <% }); %>
+            </datalist>
+            <div class='input-group date md-3' id='StartDate'>
+                <input class="form-control" placeholder="<%= search.StartDateLabel %>" name="StartDate" <% if ( search.SearchMode == 'Hotels') { %>
+                    type="date"
+                <% } else { %>
+                    type="datetime-local"
+                <% } %>
+                />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        
+            <div class='input-group date md-3' id='EndDate'>
+                <input class="form-control" placeholder="<%= search.EndDateLabel %>" name="EndDate"  <% if ( search.SearchMode == 'Hotels') { %>
+                    type="date"
+                <% } else { %>
+                    type="datetime-local"
+                <% } %>
+                />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        
+            <input type="submit" value="Search" class="btn btn-primary" />
+        </form>
+
+        <% include ../partials/footer %>
+    </body>
+</html>
+

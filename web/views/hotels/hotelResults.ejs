@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/head', { title : 'Hotels' }) %>
+    <body>
+        <% include ../partials/body %>
+       
+<h2>Hotel Search Results</h2>
+
+<form action="/Hotels/Purchase" class="form-inline" method="POST">
+    <div>
+
+        <% Hotels.forEach(function(hotel) { %>
+            <%- include('../partials/hotel', { ShowPurchase: true, hotel: hotel, NumberOfDays: NumberOfDays }) %>
+        <% }); %>
+
+        <input type="hidden" name="NumberOfDays" value="<%= NumberOfDays %>" />
+        <input type="submit" value="Add To Cart" class="btn btn-success" />
+    </div>
+
+</form>
+
+<% include ../partials/footer %>
+</body>
+</html>
+
+

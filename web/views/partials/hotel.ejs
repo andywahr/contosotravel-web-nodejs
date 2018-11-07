@@ -1,0 +1,18 @@
+<%{ var days = Math.floor(NumberOfDays); } %>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title float-left">
+            <%= hotel.RoomType %> - Total Cost: $<%= (hotel.Cost * NumberOfDays).toFixed(2) %> ($<%= hotel.Cost.toFixed(2) %>/Day)
+        </h5>
+    <% if (ShowPurchase) { %>
+        <label class="btn btn-primary input-group-btn float-right">
+            <input type="radio" id="SelectedHotel" name="SelectedHotel" value="<%= hotel.id %>">Purchase
+        </label>
+    <% } %>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Hotel Location: <%= hotel.LocationAirport.AirportName %> (<%= hotel.Location %>)</h5>
+        <h5 class="card-title">Total Duration: <%= days %> days</h5>
+    </div>
+</div>

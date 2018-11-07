@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/head', { title : 'Flights' }) %>
+    <body>
+        <% include ../partials/body %>
+       
+<h2>Flight Search Results</h2>
+
+<form action="/Flights/Purchase" class="form-inline" method="POST">
+    <div>
+        <h4>Departing Flights</h4>
+        <hr />
+        <% DepartingFlights.forEach(function(flight) { %>
+            <%- include('../partials/flight', { SelectedFlightName : 'SelectedDepartingFlight', ShowPurchase: true, flight: flight }) %>
+        <% }); %>
+    </div>
+    <br />
+    <div>
+        <h4>Returning Flights</h4>
+        <hr />
+        <% ReturningFlights.forEach(function(flight) { %>
+            <%- include('../partials/flight', { SelectedFlightName : 'SelectedReturningFlight', ShowPurchase: true, flight: flight }) %>
+        <% }); %>
+        <input type="submit" value="Add To Cart" class="btn btn-success" />
+    </div>
+
+</form>
+
+<% include ../partials/footer %>
+</body>
+</html>
+
+

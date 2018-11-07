@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/head', { title : 'Cars' }) %>
+    <body>
+        <% include ../partials/body %>
+       
+<h2>Car Search Results</h2>
+
+<form action="/Cars/Purchase" class="form-inline" method="POST">
+    <div>
+
+        <% Cars.forEach(function(car) { %>
+            <%- include('../partials/car', { ShowPurchase: true, car: car, NumberOfDays: NumberOfDays }) %>
+        <% }); %>
+
+        <input type="hidden" name="NumberOfDays" value="<%= NumberOfDays %>" />
+        <input type="submit" value="Add To Cart" class="btn btn-success" />
+    </div>
+
+</form>
+
+<% include ../partials/footer %>
+</body>
+</html>
+
+

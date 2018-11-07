@@ -1,0 +1,31 @@
+
+<% { var totalCost = 0; } %>
+<% { if ( cart.DepartingFlight != undefined ) totalCost += cart.DepartingFlight.Cost; } %>
+<% { if ( cart.ReturningFlight != undefined ) totalCost += cart.ReturningFlight.Cost; } %>
+<% { if ( cart.CarReservation != undefined ) totalCost += (cart.CarReservation.Cost * cart.CarReservationDuration); } %>
+<% { if ( cart.HotelReservation != undefined ) totalCost += (cart.HotelReservation.Cost * cart.HotelReservationDuration); } %>
+
+<!DOCTYPE html>
+<html>
+    <%- include('../partials/head', { title : 'Cart' }) %>
+    <body>
+        <% include ../partials/body %>
+       
+<h2>Cart Total: $<%= totalCost.toFixed(2) %></h2>
+
+<form action="/Cart/Purchase" class="form-inline" method="POST">
+    <div>
+
+        <%- include('../partials/cart', { cart: cart }) %>
+
+        <input type="hidden" name="PurchasedOn" value="<%= new Date().toUTCString() %>" />
+        <input type="submit" value="Purchase" class="btn btn-success" />
+    </div>
+
+</form>
+
+<% include ../partials/footer %>
+</body>
+</html>
+
+
