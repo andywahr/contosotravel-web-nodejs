@@ -21,7 +21,7 @@ class CosmosDbFlight{
     }
 
     async findFlight(flightId) {
-        var result = this.cosmosDbClient.findById(flightId);
+        var result = await this.cosmosDbClient.findById(flightId);
         return result;
     }
 };

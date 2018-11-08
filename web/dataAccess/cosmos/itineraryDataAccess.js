@@ -19,7 +19,7 @@ class CosmosDbItinerary{
     }
 
     async getItinerary(itineraryId) {
-        var result = this.cosmosDbClient.findById(itineraryId);
+        var result = await this.cosmosDbClient.findById(itineraryId);
         return result;
     }
 

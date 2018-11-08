@@ -75,11 +75,11 @@ class CosmosDbCart{
 
     async deleteCart(cartId) {
         var cart = await this.getCart(cartId);
-        await this.cosmosDbClient.container.item(cart.id).delete(cart);
+        await this.cosmosDbClient.container.item(cartId).delete(cart);
     }
         
     newCart() {
-        var cart = { id: uuid().replace( /\-/g, '') };
+        var cart = { Id: uuid().replace( /\-/g, '') };
         return cart;
     }
 };

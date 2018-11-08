@@ -4,7 +4,10 @@ var cookieParser = require('cookie-parser')
 var ejs = require('ejs');
 var http = require('http');
 var path = require('path');
+
+
 var CartDisplayProvider = require('./dataAccess/cartDisplayProvider');
+var AirportDisplayProvider = require('./dataAccess/airportDisplayProvider');
 
 var config = require('./config/keyVault');
 
@@ -13,39 +16,36 @@ var configPromise = config.loadConfig("andytst1-keyvault");
 var app = express();
 var dataAccess = '';
 var service = '';
-var cartDataAdapter = '';
+var cartDisplayProvider = '';
+var airportDisplayProvider = '';
 
 app.use(express.json()); 
 app.use(express.urlencoded());
 app.use(cookieParser())
 
 app.set('view engine', 'ejs')
-app.set('port', 3000);
+app.set('port', 1500);
 
 app.get('/', function (req, res) {
-    dataAccess.airport.getAll().then(function(data) {
-            res.render('shared/search', {search : {SearchMode: 'Flights',
-                                            IncludeEndLocation : true,
-                                            StartLocationLabel : "Depart From",
-                                            EndLocationLabel : "Return From",
-                                            StartDateLabel : "Depart",
-                                            EndDateLabel : "Return",
-                                            AirPorts : data
-                                        }, title: "Find Flights"});    
-    });
+    res.render('shared/search', {search : {SearchMode: 'Flights',
+                                    IncludeEndLocation : true,
+                                    StartLocationLabel : "Depart From",
+                                    EndLocationLabel : "Return From",
+                                    StartDateLabel : "Depart",
+                                    EndDateLabel : "Return",
+                                    AirPorts : airportDisplayProvider.getAll()
+                                }, title: "Find Flights"});    
  });
 
  app.get('/flights', function (req, res) {
-    dataAccess.airport.getAll().then(function(data) {
-            res.render('shared/search', {search : {SearchMode: 'Flights',
-                                            IncludeEndLocation : true,
-                                            StartLocationLabel : "Depart From",
-                                            EndLocationLabel : "Return From",
-                                            StartDateLabel : "Depart",
-                                            EndDateLabel : "Return",
-                                            AirPorts : data
-                                        }, title: "Find Flights"});    
-    });
+    res.render('shared/search', {search : {SearchMode: 'Flights',
+                                    IncludeEndLocation : true,
+                                    StartLocationLabel : "Depart From",
+                                    EndLocationLabel : "Return From",
+                                    StartDateLabel : "Depart",
+                                    EndDateLabel : "Return",
+                                    AirPorts : airportDisplayProvider.getAll()
+                                }, title: "Find Flights"});    
  });
 
  app.post('/flights/search', function (req, res) {
@@ -54,9 +54,11 @@ app.get('/', function (req, res) {
 
     Promise.all([startingFlight, endingFlight]).then(function(values){
 
+        var departingFlights = airportDisplayProvider.resolveAirportsForAll(values[0]);
+        var returningFlights = airportDisplayProvider.resolveAirportsForAll(values[1]);
         res.render('flights/flightResults', {
-                                        DepartingFlights: values[0],
-                                        ReturningFlights: values[1]
+                                        DepartingFlights: departingFlights,
+                                        ReturningFlights: returningFlights
                                     });  
 
     }).catch(function(error) {
@@ -68,8 +70,8 @@ app.get('/', function (req, res) {
     var cartId = req.cookies['CartId'];
      dataAccess.cart.upsertCartFlights(cartId, req.body.SelectedDepartingFlight, req.body.SelectedReturningFlight).then(function(cart) {
  
-         if ( cart.id != cartId ) {
-             res.cookie('CartId', cart.id);
+         if ( cart.Id != cartId ) {
+             res.cookie('CartId', cart.Id);
          }
 
          res.redirect('/cart');
@@ -80,22 +82,20 @@ app.get('/', function (req, res) {
   });
 
  app.get('/cars', function (req, res) {
-    dataAccess.airport.getAll().then(function(data) {
-        res.render('shared/search', {search :   {SearchMode: 'Cars',
-                                                    IncludeEndLocation : false,
-                                                    StartLocationLabel : "Location",
-                                                    StartDateLabel : "Pick-Up",
-                                                    EndDateLabel : "Drop-Off",
-                                                    AirPorts : data
-                                                }, title: "Find Flights"});    
-    });
+    res.render('shared/search', {search :   {SearchMode: 'Cars',
+                                                IncludeEndLocation : false,
+                                                StartLocationLabel : "Location",
+                                                StartDateLabel : "Pick-Up",
+                                                EndDateLabel : "Drop-Off",
+                                                AirPorts : airportDisplayProvider.getAll()
+                                            }, title: "Find Flights"});    
  });
 
  app.post('/cars/search', function (req, res) {
     dataAccess.car.findCars(req.body.StartLocation, req.body.StartDate).then(function(cars){
         var duration = ((new Date(req.body.EndDate)) - (new Date(req.body.StartDate))) / (1000 * 60 * 60 * 24);
         res.render('cars/carResults', {
-                                        Cars: cars,
+                                        Cars: airportDisplayProvider.resolveAirportsForAll(cars),
                                         NumberOfDays: duration
                                     });  
 
@@ -108,8 +108,8 @@ app.get('/', function (req, res) {
     var cartId = req.cookies['CartId'];
      dataAccess.cart.upsertCartCar(cartId, req.body.SelectedCar, req.body.NumberOfDays).then(function(cart) {
  
-         if ( cart.id != cartId ) {
-             res.cookie('CartId', cart.id);
+         if ( cart.Id != cartId ) {
+             res.cookie('CartId', cart.Id);
          }
 
          res.redirect('/cart');
@@ -120,22 +120,20 @@ app.get('/', function (req, res) {
   });
 
  app.get('/hotels', function (req, res) {
-    dataAccess.airport.getAll().then(function(data) {
-            res.render('shared/search', {search : {SearchMode: 'Hotels',
-                                                    IncludeEndLocation : false,
-                                                    StartLocationLabel : "Location",
-                                                    StartDateLabel : "Check-In",
-                                                    EndDateLabel : "Check-Out",
-                                                    AirPorts : data
-                                                }, title: "Find Flights"});    
-    });
+        res.render('shared/search', {search : {SearchMode: 'Hotels',
+                                                IncludeEndLocation : false,
+                                                StartLocationLabel : "Location",
+                                                StartDateLabel : "Check-In",
+                                                EndDateLabel : "Check-Out",
+                                                AirPorts : airportDisplayProvider.getAll()
+                                            }, title: "Find Flights"});    
  });
 
  app.post('/hotels/search', function (req, res) {
     dataAccess.hotel.findHotels(req.body.StartLocation, req.body.StartDate).then(function(hotels){
         var duration = ((new Date(req.body.EndDate)) - (new Date(req.body.StartDate))) / (1000 * 60 * 60 * 24);
         res.render('hotels/hotelResults', {
-                                        Hotels: hotels,
+                                        Hotels: airportDisplayProvider.resolveAirportsForAll(hotels),
                                         NumberOfDays: duration
                                     });  
 
@@ -146,10 +144,10 @@ app.get('/', function (req, res) {
 
  app.post('/hotels/purchase', function (req, res) {
    var cartId = req.cookies['CartId'];
-    dataAccess.dataAccess.cart.upsertCartHotel(cartId, req.body.SelectedHotel, req.body.NumberOfDays).then(function(cart) {
+   dataAccess.cart.upsertCartHotel(cartId, req.body.SelectedHotel, req.body.NumberOfDays).then(function(cart) {
 
-        if ( cart.id != cartId ) {
-            res.cookie('CartId', cart.id);
+        if ( cart.Id != cartId ) {
+            res.cookie('CartId', cart.Id);
         }
 
         res.redirect('/cart');
@@ -160,7 +158,7 @@ app.get('/', function (req, res) {
 
  app.get('/cart', function (req, res) {
     var cartId = req.cookies['CartId'];
-    cartDataAdapter.loadFullCart(cartId).then(function(fullCart) {
+    cartDisplayProvider.loadFullCart(cartId).then(function(fullCart) {
         res.render('cart/index', { cart: fullCart });  
     }).catch(function(error) {
         console.log(error);
@@ -180,7 +178,7 @@ app.get('/', function (req, res) {
     var cartId = req.cookies['CartId'];
     dataAccess.itinerary.getItinerary(cartId).then(function(itinerary) {
         if ( itinerary != undefined ) {
-            cartDataAdapter.populateFullCart(itinerary).then(function(fullItinerary) {
+            cartDisplayProvider.populateFullCart(itinerary).then(function(fullItinerary) {
                 res.render('itinerary/index', { itinerary: fullItinerary });  
             });
         }
@@ -199,6 +197,8 @@ configPromise.then(function(contosoConfig) {
     
     if ( contosoConfig.dataType == 'CosmosSQL' ) {
         DataAccess = require('./dataAccess/cosmos');
+    } else if ( contosoConfig.dataType == 'SQL' ) {
+        DataAccess = require('./dataAccess/sql');
     }
 
     //if ( contosoConfig.servicesType == 'Monolith' ) {
@@ -209,14 +209,22 @@ configPromise.then(function(contosoConfig) {
     service = new Service(contosoConfig, dataAccess);
 
     dbPromise = dataAccess.init();
-    cartDataAdapter = new CartDisplayProvider(dataAccess);
-    
+
     dbPromise.then(function() {
-        http.createServer(app).listen(app.get('port'), function() {
-            console.log('Express server listening on port ' + app.get('port'));
+        airportDisplayProvider = new AirportDisplayProvider(dataAccess);
+        cartDisplayProvider = new CartDisplayProvider(dataAccess, airportDisplayProvider);
+
+        airportPromise = airportDisplayProvider.init();
+        
+        airportPromise.then(function () {
+            http.createServer(app).listen(app.get('port'), function() {
+                console.log('Express server listening on port ' + app.get('port'));
+            });
+        }).catch(function(error) {
+            console.log(error);
         });
     }).catch(function(error) {
         console.log(error);
-      });
+    });
 });
 

@@ -20,7 +20,7 @@ class CosmosDbHotel{
     }
 
     async findHotel(hotelId) {
-        var result = this.cosmosDbClient.findById(hotelId);
+        var result = await this.cosmosDbClient.findById(hotelId);
         return result;
     }
 };

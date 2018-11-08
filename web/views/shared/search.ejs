@@ -17,7 +17,7 @@
             <% } %>
             <datalist id="airPorts">
                 <% search.AirPorts.forEach(function(airport) { %>
-                    <option value="<%= airport.id %>"><%= airport.AirportName %></option>
+                    <option value="<%= airport.AirportCode %>"><%= airport.AirportName %></option>
                 <% }); %>
             </datalist>
             <div class='input-group date md-3' id='StartDate'>

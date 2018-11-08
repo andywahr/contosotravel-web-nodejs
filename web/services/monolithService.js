@@ -7,7 +7,7 @@ class MonolithService {
     }
 
     async SendForProcessing(cartId, purchasedOn) {
-        //await new Promise(resolve => setTimeout(resolve, (Math.floor(Math.random() * 30000))));
+        await new Promise(resolve => setTimeout(resolve, (Math.floor(Math.random() * 30000))));
         await this.service.Purchase(cartId, purchasedOn);
     }
 }

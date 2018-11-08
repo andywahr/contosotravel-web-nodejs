@@ -15,11 +15,11 @@ class CosmosDbAirport{
     };
     
     async getAll() {
-        return this.allAirports;
+        return await this.allAirports;
     }
 
     async findByCode(airportCode) {
-        var result = this.cosmosDbClient.findById(airportCode);
+        var result = await this.cosmosDbClient.findById(airportCode);
         return result;
     }
 };

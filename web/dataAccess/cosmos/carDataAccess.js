@@ -20,7 +20,7 @@ class CosmosDbCar{
     }
 
     async findCar(carId) {
-        var result = this.cosmosDbClient.findById(carId);
+        var result = await this.cosmosDbClient.findById(carId);
         return result;
     }
 };
