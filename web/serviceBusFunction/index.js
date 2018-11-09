@@ -2,7 +2,7 @@ const FulfillmentService =  require('../services/fulfillmentService');
 const DataAccess = request('./dataAccess/dataAccessProvider');
 
 var config = require('../config/keyVault');
-var contosoConfig = await config.loadConfig("andytst1-keyvault");
+var contosoConfig = await config.loadConfig(process.env.KeyVaultAccountName);
 dataAccess = DataAccess.getDataProvider(contosoConfig);
 
 module.exports = async function(context, mySbMsg) {
