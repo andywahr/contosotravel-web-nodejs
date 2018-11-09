@@ -1,3 +1,4 @@
+/*
 const FulfillmentService =  require('../services/fulfillmentService');
 const DataAccess = require('../dataAccess/dataAccessProvider');
 
@@ -7,9 +8,10 @@ var dataAccess;
 config.loadConfig(process.env.KeyVaultAccountName).then(function (contosoConfig) {
     dataAccess = DataAccess.getDataProvider(contosoConfig);
 });
+*/
 
 module.exports = async function(context, mySbMsg) {
-    var fulfillmentService = new FulfillmentService(dataAccess);
+   /* var fulfillmentService = new FulfillmentService(dataAccess);
     var purchaseItineraryMessage = JSON.parse(mySbMsg);
 
     context.info("Starting to finalize purchase of " + purchaseItineraryMessage.cartId);
@@ -25,5 +27,7 @@ module.exports = async function(context, mySbMsg) {
     else
     {
         context.info("Record Locator " + recordLocator+ " complete for cart " + purchaseItineraryMessage.cartId);
-    }
+    } */
+
+    context.info("Message: " + mySbMsg);
 };
