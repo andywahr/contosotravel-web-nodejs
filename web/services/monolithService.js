@@ -5,6 +5,9 @@ class MonolithService {
     constructor(cotosoConfig, dataAccess) {
         this.service = new fulfillmentService(dataAccess);
     }
+        
+    async init() {
+    }
 
     async SendForProcessing(cartId, purchasedOn) {
         await new Promise(resolve => setTimeout(resolve, (Math.floor(Math.random() * 30000))));

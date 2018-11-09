@@ -1,0 +1,12 @@
+{
+  "disabled": false,
+  "bindings": [
+    {
+      "name": "mySbMsg",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "queueName": "PurchaseItinerary",
+      "connection": "Endpoint=sb://arkhitekton-dev.servicebus.windows.net/;SharedAccessKeyName=ReadOnly;SharedAccessKey=jefT4ELVlbfO81nPNDiNOOh3rfn2Ag3+k5eHVdLQzFQ=="
+    }
+  ]
+}

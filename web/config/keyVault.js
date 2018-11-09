@@ -20,6 +20,7 @@ exports.loadConfig = async function(keyVaultAccountName) {
 
     config.azureRegion = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--AzureRegion");
     config.dataAccountName = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--DataAccountName");
+    config.dataAccountUserName = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--DataAccountUserName");
     config.dataAdministratorLogin = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--DataAdministratorLogin");
     config.dataAdministratorLoginPassword = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--DataAdministratorLoginPassword");
     config.dataAccountPassword = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--DataAccountPassword");
@@ -30,6 +31,7 @@ exports.loadConfig = async function(keyVaultAccountName) {
     config.servicesType = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--ServicesType");
     config.subscriptionId = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--SubscriptionId");
     config.tenantId = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--TenantId");
+    config.serviceConnectionString = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--ServiceConnectionString");
 
     return config;
 }

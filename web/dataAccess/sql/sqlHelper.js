@@ -13,16 +13,16 @@ class SqlHelper {
 
   async init() {
       this.config = { 
-        userName: this.contosoConfig.dataLogin, 
-        password: this.contosoConfig.dataLoginPassword, 
+        userName: this.contosoConfig.dataAccountUserName, 
+        password: this.contosoConfig.dataAccountPassword, 
         server: this.contosoConfig.dataAccountName + ".database.windows.net", 
         options: { 
             database: this.contosoConfig.databaseName, 
             encrypt: true, 
             debug : {
               packet: false,
-              data: true,
-              payload: true,
+              data: false,
+              payload: false,
               token: false,
               log: true
           }

@@ -5,9 +5,10 @@ var ejs = require('ejs');
 var http = require('http');
 var path = require('path');
 
-
 var CartDisplayProvider = require('./dataAccess/cartDisplayProvider');
 var AirportDisplayProvider = require('./dataAccess/airportDisplayProvider');
+var DataAccess = require('./dataAccess/dataAccessProvider');
+var Services = require('./services/servicesProvider');
 
 var config = require('./config/keyVault');
 
@@ -194,23 +195,14 @@ app.use('/public/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/public/lib', express.static(path.join(__dirname, 'public/lib')));
 
 configPromise.then(function(contosoConfig) {
-    
-    if ( contosoConfig.dataType == 'CosmosSQL' ) {
-        DataAccess = require('./dataAccess/cosmos');
-    } else if ( contosoConfig.dataType == 'SQL' ) {
-        DataAccess = require('./dataAccess/sql');
-    }
 
-    //if ( contosoConfig.servicesType == 'Monolith' ) {
-        Service = require('./services/monolithService');
-    //}
-
-    dataAccess = new DataAccess(contosoConfig);
-    service = new Service(contosoConfig, dataAccess);
+    dataAccess = DataAccess.getDataProvider(contosoConfig);
+    service = Services.getServiceProvider(contosoConfig, dataAccess);
 
     dbPromise = dataAccess.init();
+    servicePromise = service.init();
 
-    dbPromise.then(function() {
+    Promise.all([dbPromise, servicePromise]).then(function() {
         airportDisplayProvider = new AirportDisplayProvider(dataAccess);
         cartDisplayProvider = new CartDisplayProvider(dataAccess, airportDisplayProvider);
 

@@ -3,6 +3,7 @@ class ContosoConfiguration {
         this.servicesType = "";
         this.dataType = "";
         this.servicesMiddlewareAccountName = "";
+        this.serviceConnectionString = "";
         this.dataAccountName = "";
         this.databaseName = "";
         this.subscriptionId = "";
@@ -12,6 +13,7 @@ class ContosoConfiguration {
         this.dataAdministratorLogin = "";
         this.dataAdministratorLoginPassword = "";    
         this.dataAccountPassword = "";
+        this.dataAccountUserName = "";
     }
 }   
 
