@@ -9,10 +9,8 @@ var CartDisplayProvider = require('./dataAccess/cartDisplayProvider');
 var AirportDisplayProvider = require('./dataAccess/airportDisplayProvider');
 var DataAccess = require('./dataAccess/dataAccessProvider');
 var Services = require('./services/servicesProvider');
-
 var config = require('./config/keyVault');
-
-var configPromise = config.loadConfig("andytst1-keyvault");
+var configPromise = config.loadConfig(process.env.KeyVaultUrl);
 
 var app = express();
 var dataAccess = '';

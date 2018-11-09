@@ -9,8 +9,7 @@ class PurchaseServiceEventGrid {
     }
 
     async init() {
-        // var credentials = await msRestAzure.loginWithAppServiceMSI({resource: 'https://management.azure.com/'});
-        var credentials = await msRestAzure.loginWithServicePrincipalSecret("9f46a7d6-3aa4-4612-a91f-24be65970ad8", "$.P=2*-:$)/#}{{#$/$;1%#![k_H(.[=(=#;^^+*}([$r!*.)$-=W/?{|_)", "microsoft.onmicrosoft.com");
+        var credentials = await msRestAzure.loginWithAppServiceMSI({resource: 'https://management.azure.com/'});
         var EGMClient = new EventGridManagementClient(credentials, this.contosoConfig.subscriptionId);
         var topicKeys = await EGMClient.topics.listSharedAccessKeys(this.contosoConfig.resourceGroupName, this.contosoConfig.servicesMiddlewareAccountName);
         var topicCreds = new msRestAzure.TopicCredentials(topicKeys.key1);

@@ -11,8 +11,7 @@ async function getSecret(keyVaultClient, vaultUri, secretName) {
 }
 
 exports.loadConfig = async function(keyVaultAccountName) {
-   // var credentials = await msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
-    var credentials = await msRestAzure.loginWithServicePrincipalSecret("9f46a7d6-3aa4-4612-a91f-24be65970ad8", "$.P=2*-:$)/#}{{#$/$;1%#![k_H(.[=(=#;^^+*}([$r!*.)$-=W/?{|_)", "microsoft.onmicrosoft.com");
+    var credentials = await msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
     var keyVaultClient = new KeyVault.KeyVaultClient(credentials);
     var vaultUri = "https://" + keyVaultAccountName + ".vault.azure.net/";
 
