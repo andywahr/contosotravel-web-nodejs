@@ -10,7 +10,7 @@ var AirportDisplayProvider = require('./dataAccess/airportDisplayProvider');
 var DataAccess = require('./dataAccess/dataAccessProvider');
 var Services = require('./services/servicesProvider');
 var config = require('./config/keyVault');
-var configPromise = config.loadConfig(process.env.KeyVaultUrl);
+var configPromise = config.loadConfig(process.env.KeyVaultAccountName);
 
 var app = express();
 var dataAccess = '';
@@ -23,7 +23,9 @@ app.use(express.urlencoded());
 app.use(cookieParser())
 
 app.set('view engine', 'ejs')
-app.set('port', 1500);
+
+var port = process.env.PORT || 1500;
+app.set('port', port);
 
 app.get('/', function (req, res) {
     res.render('shared/search', {search : {SearchMode: 'Flights',
