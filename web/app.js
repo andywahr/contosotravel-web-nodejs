@@ -24,8 +24,9 @@ app.use(cookieParser())
 
 app.set('view engine', 'ejs')
 
-var port = process.env.PORT || 1500;
+var port = normalizePort(process.env.PORT || '1500');
 app.set('port', port);
+
 
 app.get('/', function (req, res) {
     res.render('shared/search', {search : {SearchMode: 'Flights',
@@ -220,3 +221,18 @@ configPromise.then(function(contosoConfig) {
     });
 });
 
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+  
+    if (isNaN(port)) {
+      // named pipe
+      return val;
+    }
+  
+    if (port >= 0) {
+      // port number
+      return port;
+    }
+  
+    return false;
+  }
