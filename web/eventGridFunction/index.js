@@ -2,6 +2,7 @@ const FulfillmentService =  require('../services/fulfillmentService');
 const DataAccess = require('../dataAccess/dataAccessProvider');
 
 var config = require('../config/keyVault');
+var dataAccess;
 
 config.loadConfig(process.env.KeyVaultAccountName).then(function (contosoConfig) {
     dataAccess = DataAccess.getDataProvider(contosoConfig);
