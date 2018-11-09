@@ -1,9 +1,10 @@
 const FulfillmentService =  require('../services/fulfillmentService');
-const DataAccess = request('./dataAccess/dataAccessProvider');
+const DataAccess = require('../dataAccess/dataAccessProvider');
 
 var config = require('../config/keyVault');
-var contosoConfig = await config.loadConfig(process.env.KeyVaultAccountName);
-dataAccess = DataAccess.getDataProvider(contosoConfig);
+config.loadConfig(process.env.KeyVaultAccountName).then(function (contosoConfig) {
+    dataAccess = DataAccess.getDataProvider(contosoConfig);
+});
 
 module.exports = async function(context, mySbMsg) {
     var fulfillmentService = new FulfillmentService(dataAccess);
