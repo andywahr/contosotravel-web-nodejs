@@ -12,14 +12,14 @@ module.exports = async function (context, req) {
     var fulfillmentService = new FulfillmentService(dataAccess);
     var purchaseItineraryMessage = req.body;
 
-    context.info("Starting to finalize purchase of " + purchaseItineraryMessage.cartId);
-    context.Debug("Calling Purchase method");
+    context.log.info("Starting to finalize purchase of " + purchaseItineraryMessage.cartId);
+    context.log.debug("Calling Purchase method");
 
     var recordLocator = await fulfillmentService.Purchase(purchaseItineraryMessage.cartId, purchaseItineraryMessage.purchasedOn);
 
     if (recordLocator == undefined)
     {
-        context.error("Finalization purchase of " + purchaseItineraryMessage.cartId + " failed");
+        context.log.error("Finalization purchase of " + purchaseItineraryMessage.cartId + " failed");
         context.res = {
             status: 400,
             body: "Finalization purchase of " + purchaseItineraryMessage.cartId + " failed"
@@ -27,7 +27,7 @@ module.exports = async function (context, req) {
     }
     else
     {
-        context.info("Record Locator " + recordLocator+ " complete for cart " + purchaseItineraryMessage.cartId);
+        context.log.info("Record Locator " + recordLocator+ " complete for cart " + purchaseItineraryMessage.cartId);
         context.res = { body: recordLocator };
     }
 };
