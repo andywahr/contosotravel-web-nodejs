@@ -17,6 +17,8 @@ class FulfillmentService{
         itinerary.RecordLocator = recordLocator;
 
         await this.dataAccess.itinerary.upsertItinerary(itinerary);
+
+        return recordLocator;
     }
 }
 
