@@ -1,4 +1,4 @@
-<%{ var hours = flight.Duration.split(':')[0]; minutes = flight.Duration.split(':')[1]; var departTime = new Date(flight.DepartureTimeEpoc * 1000); var arriveTime = new Date(flight.ArrivalTimeEpoc * 1000); }%>
+<%{ var hours = flight.Duration.getUTCHours(); minutes = flight.Duration.getMinutes(); var departTime = new Date(flight.DepartureTime); var arriveTime = new Date(flight.ArrivalTime); }%>
 
 <div class="card">
     <div class="card-header">
@@ -7,13 +7,13 @@
         </h5>
     <% if (ShowPurchase) { %>
         <label class="btn btn-primary input-group-btn float-right">
-            <input type="radio" id="<%= SelectedFlightName %>" name="<%= SelectedFlightName %>" value="<%= flight.id %>">Purchase
+            <input type="radio" id="<%= SelectedFlightName %>" name="<%= SelectedFlightName %>" value="<%= flight.Id %>">Purchase
         </label>
     <% } %>
     </div>
     <div class="card-body">
-        <h5 class="card-title">Departing: <%= flight.DepartingFromAiport.AirportName %> (<%= flight.DepartingFrom %>) - <%= departTime.toLocaleDateString("en-US") %> <%= departTime.toLocaleTimeString() %> <%= flight.DepartingFromAiport.TimeZone %></h5>
-        <h5 class="card-title">Arriving: <%= flight.ArrivingAtAiport.AirportName %> (<%= flight.ArrivingAt %>) - <%= arriveTime.toLocaleDateString("en-US") %> <%= arriveTime.toLocaleTimeString() %> <%= flight.ArrivingAtAiport.TimeZone %></h5>
+        <h5 class="card-title">Departing: <%= flight.DepartingFromAirport.AirportName %> (<%= flight.DepartingFrom %>) - <%= departTime.toLocaleDateString("en-US") %> <%= departTime.toLocaleTimeString() %> <%= flight.DepartingFromAirport.TimeZone %></h5>
+        <h5 class="card-title">Arriving: <%= flight.ArrivingAtAirport.AirportName %> (<%= flight.ArrivingAt %>) - <%= arriveTime.toLocaleDateString("en-US") %> <%= arriveTime.toLocaleTimeString() %> <%= flight.ArrivingAtAirport.TimeZone %></h5>
     </div>
 </div>
 
