@@ -1,0 +1,40 @@
+parameters:
+  ConnectedServiceName: ''
+  RootFolder: ''
+
+steps:
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    workingDir: '${{ parameters.RootFolder }}'
+
+    verbose: false
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+    rootFolderOrFile: '${{ parameters.RootFolder }}'
+
+    includeRootFolder: false
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts: drop'
+
+  enabled: false
+
+- task: AzureRmWebAppDeployment@3
+  displayName: 'Azure App Service Deploy: $(WebAppType) - $(WebAppName)'
+  inputs:
+    azureSubscription: '$(ConnectedServiceName)'
+
+    appType: '$(WebAppType)'
+
+    WebAppName: '$(WebAppName)'
+
+    Package: '$(build.artifactstagingdirectory)/**/*.zip'
+
+    TakeAppOfflineFlag: true
+
+    UseWebDeploy: false
+
+    RemoveAdditionalFilesFlag: true
