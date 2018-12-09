@@ -9,7 +9,7 @@ jobs:
     - npm
     - node.js
   steps:
-  - template: ./build.yaml
+  - template: ./build-appservice.yaml
     parameters:
       ConnectedServiceName: $(ConnectedServiceName)
       RootFolder: 'web'

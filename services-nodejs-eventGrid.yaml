@@ -15,7 +15,7 @@ jobs:
       SourceFolder: functions/serviceBusFunction/
       Contents: function.json
 
-  - template: ./build.yaml
+  - template: ./build-appservice.yaml
     parameters:
       ConnectedServiceName: $(ConnectedServiceName)
       RootFolder: 'functions'
