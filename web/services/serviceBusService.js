@@ -2,7 +2,7 @@ const azureSB = require('azure-sb');
 
 class PurchaseServiceBusService {
     constructor(contosoConfig, dataAccess) {
-        this.serviceBusService = azureSB.createServiceBusService(contosoConfig.serviceConnectionString);             
+        this.serviceBusService = azureSB.createServiceBusService(contosoConfig.serviceConnectionString.slice(0,contosoConfig.serviceConnectionString.indexOf('EntityPath')-1));             
     }
 
     async init() {

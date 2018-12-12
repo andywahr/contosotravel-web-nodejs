@@ -1,0 +1,26 @@
+parameters:
+  ConnectedServiceName: ''
+  AppType: ''
+  ContainerRegistryName: ''
+  ResourceGroupName: ''
+  SubscriptionId: ''
+
+queue:
+  name: Hosted Ubuntu 1604
+
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    dockerFile: 'web/Dockerfile_${{ parameters.AppType }}'
+    imageName: 'contoso-travel-${{ parameters.AppType }}:latest'
+    qualifyImageName: false
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    azureSubscription: '$(ConnectedServiceName)'
+    azureContainerRegistry: '{"loginServer":"${{ parameters.ContainerRegistryName }}.azurecr.io", "id" : "/subscriptions/${{ parameters.SubscriptionId }}/resourceGroups/${{ parameters.ResourceGroupName }}/providers/Microsoft.ContainerRegistry/registries/${{ parameters.ContainerRegistryName }}"}'
+    action: 'Push an image'
+    imageName: 'contoso-travel-${{ parameters.AppType }}:latest'
+    qualifyImageName: false

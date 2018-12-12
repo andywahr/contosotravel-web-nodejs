@@ -227,20 +227,26 @@ else if ( whichApp == 'web' )
 configPromise.then(function(contosoConfig) {
 
     var promises = [];
+    console.log('Done Loading Config');
 
     dataAccess = DataAccess.getDataProvider(contosoConfig);
     promises.push(dataAccess.init());
 
     if ( whichApp == 'web' )
     {
-        servicePromise = service.init();
-        promises.push(Services.getServiceProvider(contosoConfig, dataAccess));
+        service = Services.getServiceProvider(contosoConfig, dataAccess);
+        promises.push(service.init());
     }
     
+    console.log('Done setting up data and service promise');
+
     Promise.all(promises).then(function() {
 
-        if ( whichApp == 'web ')
+        console.log('Done waiting for data and service promise: proccessing ' + whichApp);
+
+        if ( whichApp == 'web')
         {
+            console.log('Initing Web');
             airportDisplayProvider = new AirportDisplayProvider(dataAccess);
             cartDisplayProvider = new CartDisplayProvider(dataAccess, airportDisplayProvider);
 
