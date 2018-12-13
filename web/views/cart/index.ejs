@@ -18,7 +18,7 @@
 
         <%- include('../partials/cart', { cart: cart }) %>
 
-        <input type="hidden" name="PurchasedOn" value="<%= new Date().toUTCString() %>" />
+        <input type="hidden" name="PurchasedOn" value="<%= new Date().toISOString() %>" />
         <input type="submit" value="Purchase" class="btn btn-success" />
     </div>
 

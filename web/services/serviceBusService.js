@@ -10,7 +10,7 @@ class PurchaseServiceBusService {
 
     SendForProcessing(cartId, purchasedOn) {
         var message = {
-                body: JSON.stringify({cartId: cartId, purchasedOn: new Date(purchasedOn).toISOString().replace('Z',new Date(purchasedOn).getUTCOffset().replace('00', ':00')) })
+                body: JSON.stringify({cartId: cartId, purchasedOn: new Date(purchasedOn).toISOString() })
             };
         
         return new Promise(
