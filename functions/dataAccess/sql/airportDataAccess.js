@@ -1,6 +1,5 @@
 'use strict';
 
-const SqlHelper = require('./sqlHelper');
 const TYPES = require('tedious').TYPES;
 
 class SqlDbAirport{
@@ -9,7 +8,7 @@ class SqlDbAirport{
     };
 
     async init() {
-        this.allAirports = await this.sqlDbClient.Execute("dbo.GetAllAirports", undefined);
+        this.allAirports = await this.sqlDbClient.Execute("GetAllAirports", undefined);
     };
     
     async getAll() {

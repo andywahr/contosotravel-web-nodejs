@@ -5,6 +5,8 @@ module.exports.getDataProvider = function(contosoConfig) {
         DataAccess = require('../dataAccess/cosmos');
     } else if ( contosoConfig.dataType == 'SQL' ) {
         DataAccess = require('../dataAccess/sql');
+    } else if ( contosoConfig.dataType == 'MySQL' ) {
+        DataAccess = require('../dataAccess/sql');
     }
 
     dataAccess = new DataAccess(contosoConfig);

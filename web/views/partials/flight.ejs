@@ -1,4 +1,16 @@
-<%{ var hours = flight.Duration.getUTCHours(); minutes = flight.Duration.getMinutes(); var departTime = new Date(flight.DepartureTime); var arriveTime = new Date(flight.ArrivalTime); }%>
+<%{ var hours = "";
+    var minutes = "";
+
+    if ( typeof(flight.Duration) == 'string') {
+        hours = flight.Duration.split(':')[0]; 
+        minutes = flight.Duration.split(':')[1]; 
+    } else {
+        hours = flight.Duration.getUTCHours(); 
+        minutes = flight.Duration.getMinutes();     
+    }
+        
+    var departTime = new Date(flight.DepartureTime);
+    var arriveTime = new Date(flight.ArrivalTime); }%>
 
 <div class="card">
     <div class="card-header">

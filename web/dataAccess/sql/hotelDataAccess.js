@@ -1,6 +1,5 @@
 'use strict';
 
-const SqlHelper = require('./sqlHelper');
 const TYPES = require('tedious').TYPES;
 
 class SqlDbHotel{

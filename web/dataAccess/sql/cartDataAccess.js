@@ -1,6 +1,5 @@
 'use strict';
 
-const SqlHelper = require('./sqlHelper');
 const TYPES = require('tedious').TYPES;
 const uuid = require('uuid/v4');
 

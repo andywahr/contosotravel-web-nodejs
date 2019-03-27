@@ -10,7 +10,7 @@
     <%- include('../partials/head', { title : 'Cart' }) %>
     <body>
         <% include ../partials/body %>
-       
+
 <h2>Cart Total: $<%= totalCost.toFixed(2) %></h2>
 
 <form action="/Cart/Purchase" class="form-inline" method="POST">

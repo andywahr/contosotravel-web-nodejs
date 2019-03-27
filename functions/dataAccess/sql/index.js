@@ -3,6 +3,7 @@
 const AirportDBAdapter = require('./airportDataAccess');
 const CarDBAdapter = require('./carDataAccess');
 const SqlHelper = require('./sqlHelper');
+const MySqlHelper = require('./mysqlHelper');
 const FlightDBAdapter = require('./flightDataAccess');
 const HotelDBAdapter = require('./hotelDataAccess');
 const CartDBAdapter = require('./cartDataAccess');
@@ -15,7 +16,12 @@ class SqlDataAdapter{
     };
 
     async init() {
-        this.sqlDbClient = new SqlHelper(this.contosoConfig);
+        if ( this.contosoConfig.dataType == 'SQL' ) {
+            this.sqlDbClient = new SqlHelper(this.contosoConfig);
+        } else if ( this.contosoConfig.dataType == 'MySQL' ) {
+            this.sqlDbClient = new MySqlHelper(this.contosoConfig);
+        }
+
         await this.sqlDbClient.init();
 
         this.airport = new AirportDBAdapter(this.sqlDbClient);
