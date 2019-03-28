@@ -1,0 +1,60 @@
+# a build with no CI
+trigger: none
+
+jobs:
+- job: NetCore_Web_Kubernetes
+  pool:
+    name: Hosted Ubuntu 1604
+
+  variables:
+    NamePrefix_local: $(NamePrefix)
+    SubscriptionId_local: $(SubscriptionId)
+    ConnectedServiceName_local: $(ConnectedServiceName)
+    eventing_local: $(eventing)
+
+  steps:
+  - task: Docker@0
+    displayName: 'Build a container image'
+    inputs:
+      imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-web:$(Build.BuildId)'
+      includeLatestTag: true
+      dockerFile: src/HostCoreDockerfile
+      workingDirectory: '$(build.sourcesDirectory)/functions'
+      environmentVbuildArguments: '--build-arg eventing=${{ variables.eventing_local }}'
+  
+  - task: Docker@0
+    displayName: 'Push a container image'
+    inputs:
+      azureSubscription: '${{ variables.ConnectedServiceName_local }}'
+      azureContainerRegistry: '{"loginServer":"acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io", "id":"/subscriptions/${{ variables.SubscriptionId_local }}/resourceGroups/rg-${{ variables.NamePrefix_local }}/providers/Microsoft.ContainerRegistry/registries/acrContosoTravel${{ variables.NamePrefix_local }}"}'
+      action: 'Push an image'
+      includeLatestTag: true
+      imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-web:$(Build.BuildId)'
+      workingDirectory: '$(build.sourcesDirectory)/functions'
+
+  - powershell: |
+     $dir = "/tmp/arkhitekton-modules"
+     mkdir $dir
+     cd $dir
+     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-dotnet', 'arkhitekton-modules')
+     "$repoUrl"
+     git init $dir
+     git remote add origin $repoUrl
+     git config gc.auto 0
+     git config --get-all "http.$($repoUrl).extraheader"
+     git config --get-all http.proxy
+     git -c http.extraheader="AUTHORIZATION: bearer $env:SYSTEM_ACCESSTOKEN" fetch --tags --prune --progress --no-recurse-submodules origin
+     git checkout origin/master
+     ls $dir/*
+    env:
+      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+      REPO_URI: $(Build.Repository.Uri)
+    displayName: 'Get latest on modules repo'
+ 
+  - task: AzureCLI@1
+    displayName: 'Azure CLI - Running configuration.ps1 and Deploy'
+    inputs:
+      azureSubscription: '${{ variables.ConnectedServiceName_local }}'
+      scriptPath: /tmp/arkhitekton-modules/Terraform/ContosoTravel/Kubernetes/configure.bash
+      arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/arkhitekton-modules/Terraform/ContosoTravel/backend/kubernetes/webdeploy.yaml'
+      workingDirectory: $(Build.sourcesDirectory)

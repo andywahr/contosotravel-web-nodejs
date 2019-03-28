@@ -76,4 +76,4 @@ typings/
 .fusebox/
 
 # VS COde settings
-launch.json
+**/.vscode

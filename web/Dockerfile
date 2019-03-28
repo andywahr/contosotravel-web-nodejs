@@ -3,5 +3,6 @@ WORKDIR /app
 COPY package.json /app
 RUN npm install
 COPY . /app
-CMD node app.js serviceServiceBus
-EXPOSE 8081
+ENV PORT 80
+CMD node app.js web
+EXPOSE 80
