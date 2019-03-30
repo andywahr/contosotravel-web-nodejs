@@ -11,7 +11,17 @@ async function getSecret(keyVaultClient, vaultUri, secretName) {
 }
 
 exports.loadConfig = async function(keyVaultAccountName) {
-    var credentials = await msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
+    var credentials = null;
+    if (!process.env.AZURE_CLIENT_ID){
+        if (!process.env.APPSETTING_WEBSITE_SITE_NAME) {
+            credentials = await msRestAzure.loginWithMSI({resource: 'https://vault.azure.net'});
+        } else {
+            credentials = await msRestAzure.loginWithAppServiceMSI({resource: 'https://vault.azure.net'});
+        }
+    } else {
+        credentials = await msRestAzure.loginWithServicePrincipalSecret(process.env.AZURE_CLIENT_ID, process.env.AZURE_CLIENT_SECRET, process.env.AZURE_TENANT_ID);
+    }
+
     var keyVaultClient = new KeyVault.KeyVaultClient(credentials);
     var vaultUri = "https://" + keyVaultAccountName + ".vault.azure.net/";
 

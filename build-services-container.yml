@@ -16,9 +16,8 @@ jobs:
   - task: Docker@0
     displayName: 'Build a container image'
     inputs:
-      imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-web:$(Build.BuildId)'
+      imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-service:$(Build.BuildId)'
       includeLatestTag: true
-      dockerFile: src/HostCoreDockerfile
       workingDirectory: '$(build.sourcesDirectory)/functions'
       environmentVbuildArguments: '--build-arg eventing=${{ variables.eventing_local }}'
   
@@ -29,14 +28,14 @@ jobs:
       azureContainerRegistry: '{"loginServer":"acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io", "id":"/subscriptions/${{ variables.SubscriptionId_local }}/resourceGroups/rg-${{ variables.NamePrefix_local }}/providers/Microsoft.ContainerRegistry/registries/acrContosoTravel${{ variables.NamePrefix_local }}"}'
       action: 'Push an image'
       includeLatestTag: true
-      imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-web:$(Build.BuildId)'
+      imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-service:$(Build.BuildId)'
       workingDirectory: '$(build.sourcesDirectory)/functions'
 
   - powershell: |
      $dir = "/tmp/arkhitekton-modules"
      mkdir $dir
      cd $dir
-     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-dotnet', 'arkhitekton-modules')
+     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-nodejs', 'arkhitekton-modules')
      "$repoUrl"
      git init $dir
      git remote add origin $repoUrl

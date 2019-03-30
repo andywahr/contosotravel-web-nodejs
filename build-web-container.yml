@@ -17,7 +17,7 @@ jobs:
     inputs:
       imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-web:$(Build.BuildId)'
       includeLatestTag: true
-      dockerFile: src/HostCoreDockerfile
+      dockerFile: web/Dockerfile
       workingDirectory: '$(build.sourcesDirectory)/web'
   
   - task: Docker@0
@@ -34,7 +34,7 @@ jobs:
      $dir = "/tmp/arkhitekton-modules"
      mkdir $dir
      cd $dir
-     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-dotnet', 'arkhitekton-modules')
+     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-nodejs', 'arkhitekton-modules')
      "$repoUrl"
      git init $dir
      git remote add origin $repoUrl
