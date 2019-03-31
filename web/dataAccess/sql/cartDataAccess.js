@@ -11,7 +11,7 @@ class SqlDbCart{
     async getCart(cartId) {
         cartId = this.sqlDbClient.ensureCartGuid(cartId);
         var result = await this.sqlDbClient.Execute("GetCartById",function(request) {
-            request.addParameter('Id', TYPES.VarChar, cartId)
+            request.addParameter('IdP', TYPES.VarChar, cartId)
         });
 
         if ( result != undefined ) {
@@ -29,9 +29,9 @@ class SqlDbCart{
             cartId = uuid();
         }
         var result = await this.sqlDbClient.Execute("UpsertCartFlights", function(request) {
-            request.addParameter('Id', TYPES.VarChar, cartId);
-            request.addParameter('DepartingFlight', TYPES.Int, departingFlightId);
-            request.addParameter('ReturningFlight', TYPES.Int, returningFlightId);
+            request.addParameter('IdP', TYPES.VarChar, cartId);
+            request.addParameter('DepartingFlightP', TYPES.Int, departingFlightId);
+            request.addParameter('ReturningFlightP', TYPES.Int, returningFlightId);
         });
 
         var newCart = await this.getCart(cartId);
@@ -46,9 +46,9 @@ class SqlDbCart{
             cartId = uuid();
         }
         var result = await this.sqlDbClient.Execute("UpsertCartCar", function(request) {
-            request.addParameter('Id', TYPES.VarChar, cartId);
-            request.addParameter('CarReservation', TYPES.Int, carId);
-            request.addParameter('CarReservationDuration', TYPES.Float, numberOfDays);
+            request.addParameter('IdP', TYPES.VarChar, cartId);
+            request.addParameter('CarReservationP', TYPES.Int, carId);
+            request.addParameter('CarReservationDurationP', TYPES.Float, numberOfDays);
         });
 
         var newCart = await this.getCart(cartId);
@@ -63,9 +63,9 @@ class SqlDbCart{
             cartId = uuid();
         }
         var result = await this.sqlDbClient.Execute("UpsertCartHotel", function(request) {
-            request.addParameter('Id', TYPES.VarChar, cartId);
-            request.addParameter('HotelReservation', TYPES.Int, hotelId);
-            request.addParameter('HotelReservationDuration', TYPES.Float, numberOfDays);
+            request.addParameter('IdP', TYPES.VarChar, cartId);
+            request.addParameter('HotelReservationP', TYPES.Int, hotelId);
+            request.addParameter('HotelReservationDurationP', TYPES.Float, numberOfDays);
         });
 
         var newCart = await this.getCart(cartId);
@@ -75,7 +75,7 @@ class SqlDbCart{
     async deleteCart(cartId) {
         cartId = this.sqlDbClient.ensureCartGuid(cartId);
         await this.sqlDbClient.Execute("DeleteCart", function(request) {
-            request.addParameter('Id', TYPES.VarChar, cartId)
+            request.addParameter('IdP', TYPES.VarChar, cartId)
         });
     }
 };

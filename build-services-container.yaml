@@ -19,7 +19,7 @@ jobs:
       imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-service:$(Build.BuildId)'
       includeLatestTag: true
       workingDirectory: '$(build.sourcesDirectory)/functions'
-      environmentVbuildArguments: '--build-arg eventing=${{ variables.eventing_local }}'
+      buildArguments: 'eventing=${{ variables.eventing_local }}'
   
   - task: Docker@0
     displayName: 'Push a container image'

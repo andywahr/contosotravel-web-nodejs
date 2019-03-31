@@ -17,7 +17,7 @@ class SqlDbAirport{
 
     async findByCode(airportCode) {
         var result = await this.sqlDbClient.Execute("FindAirportByCode", function(request) {
-            request.addParameter('AirportCode', TYPES.Char, airportCode)
+            request.addParameter('AirportCodeP', TYPES.Char, airportCode)
         });
 
         if ( result != undefined ) {

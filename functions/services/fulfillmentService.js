@@ -6,8 +6,13 @@ class FulfillmentService{
     }
 
     async Purchase(cartId, purchasedOn) {
+
+        console.log("Passed in CartId:" + cartId + " purchaseOn:" + purchasedOn);
+
         var itinerary = await this.dataAccess.cart.getCart(cartId);
         itinerary.PurchasedOn = purchasedOn;
+
+        console.log("Purchasing: " + JSON.stringify(itinerary));
 
         var recordLocator = "";
         for ( var ii = 0; ii < 6; ii++ ) {

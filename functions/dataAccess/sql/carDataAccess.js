@@ -9,15 +9,15 @@ class SqlDbCar{
     
     async findCars(location, startDate) {
         var results = await this.sqlDbClient.Execute("FindCars", function(request) {
-            request.addParameter('Location', TYPES.Char, location);
-            request.addParameter('DesiredTime', TYPES.DateTimeOffset, new Date(startDate));
+            request.addParameter('LocationP', TYPES.Char, location);
+            request.addParameter('DesiredTimeP', TYPES.DateTimeOffset, new Date(startDate));
         });
         return this.fixCarTypes(results);
     }
 
     async findCar(carId) {
         var result = await this.sqlDbClient.Execute("FindCarById", function(request) {
-            request.addParameter('Id', TYPES.Int, carId)
+            request.addParameter('IdP', TYPES.Int, carId)
         });
         if ( result != undefined ) {
             return this.fixCarType(result[0]);

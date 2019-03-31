@@ -9,15 +9,15 @@ class SqlDbHotel{
     
     async findHotels(location, startDate) {
         var results = await this.sqlDbClient.Execute("FindHotels", function(request) {
-            request.addParameter('Location', TYPES.Char, location);
-            request.addParameter('DesiredTime', TYPES.DateTimeOffset, new Date(startDate));
+            request.addParameter('LocationP', TYPES.Char, location);
+            request.addParameter('DesiredTimeP', TYPES.DateTimeOffset, new Date(startDate));
         });
         return this.fixRoomTypes(results);
     }
 
     async findHotel(hotelId) {
         var result = await this.sqlDbClient.Execute("FindHotelById", function(request) {
-            request.addParameter('Id', TYPES.Int, hotelId)
+            request.addParameter('IdP', TYPES.Int, hotelId)
         });
         if ( result != undefined ) {
             return this.fixRoomType(result[0]);

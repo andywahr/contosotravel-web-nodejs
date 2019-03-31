@@ -9,7 +9,7 @@ class SqlDbItinerary{
     
     async findItinerary(recordLocator) {
         var result = await this.sqlDbClient.Execute("GetItineraryByRecordLocatorId", function(request) {
-            request.addParameter('RecordLocator', TYPES.VarChar, recordLocator)
+            request.addParameter('RecordLocatorP', TYPES.VarChar, recordLocator)
         });
 
         if ( result != undefined ) {
@@ -22,7 +22,7 @@ class SqlDbItinerary{
     async getItinerary(itineraryId) {
         itineraryId = this.sqlDbClient.ensureCartGuid(itineraryId);
         var result = await this.sqlDbClient.Execute("GetItineraryById", function(request) {
-            request.addParameter('Id', TYPES.VarChar, itineraryId)
+            request.addParameter('IdP', TYPES.VarChar, itineraryId)
         });
 
         if ( result != undefined ) {
@@ -42,15 +42,15 @@ class SqlDbItinerary{
         var HotelReservationDuration = this.sqlDbClient.nullIfZero(itinerary.HotelReservationDuration);
 
         await this.sqlDbClient.Execute("UpsertItinerary", function(request) {
-            request.addParameter('Id', TYPES.VarChar, itineraryId);
-            request.addParameter('DepartingFlight', TYPES.Int, DepartingFlight);
-            request.addParameter('ReturningFlight', TYPES.Int, ReturningFlight);
-            request.addParameter('CarReservation', TYPES.Int, CarReservation);
-            request.addParameter('CarReservationDuration', TYPES.Float, CarReservationDuration);
-            request.addParameter('HotelReservation', TYPES.Int, HotelReservation);
-            request.addParameter('HotelReservationDuration', TYPES.Float, HotelReservationDuration);
-            request.addParameter('RecordLocator', TYPES.VarChar, itinerary.RecordLocator);
-            request.addParameter('PurchasedOn', TYPES.DateTimeOffset, new Date(itinerary.PurchasedOn));
+            request.addParameter('IdP', TYPES.VarChar, itineraryId);
+            request.addParameter('DepartingFlightP', TYPES.Int, DepartingFlight);
+            request.addParameter('ReturningFlightP', TYPES.Int, ReturningFlight);
+            request.addParameter('CarReservationP', TYPES.Int, CarReservation);
+            request.addParameter('CarReservationDurationP', TYPES.Float, CarReservationDuration);
+            request.addParameter('HotelReservationP', TYPES.Int, HotelReservation);
+            request.addParameter('HotelReservationDurationP', TYPES.Float, HotelReservationDuration);
+            request.addParameter('RecordLocatorP', TYPES.VarChar, itinerary.RecordLocator);
+            request.addParameter('PurchasedOnP', TYPES.DateTimeOffset, new Date(itinerary.PurchasedOn));
         });
     }
 };

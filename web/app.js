@@ -1,3 +1,6 @@
+const appInsights = require("applicationinsights");
+appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
+appInsights.start();
 
 var express = require('express');
 var cookieParser = require('cookie-parser')
