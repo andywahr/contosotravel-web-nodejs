@@ -79,7 +79,8 @@ class CosmosDbCart{
     }
         
     newCart() {
-        var cart = { Id: uuid().replace( /\-/g, '') };
+        var newId = uuid().replace( /\-/g, '');
+        var cart = { id: newId, Id: newId };
         return cart;
     }
 };
