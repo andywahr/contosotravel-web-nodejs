@@ -65,7 +65,7 @@ app.get('/flights', function (req, res) {
 });
 
 app.post('/flights/search', function (req, res) {
-    var isTest = req.query.IsTest == "True";
+    var isTest = req.body.IsTest == "True";
     var startingFlight = dataAccess.flight.findFlights(req.body.StartLocation, req.body.EndLocation, req.body.StartDate, 3);
     var endingFlight = dataAccess.flight.findFlights(req.body.EndLocation, req.body.StartLocation, req.body.EndDate, 3);
 
@@ -75,8 +75,11 @@ app.post('/flights/search', function (req, res) {
         var returningFlights = airportDisplayProvider.resolveAirportsForAll(values[1]);
 
         if (isTest) {
-            departingFlights[getRandomInt(departingFlights.length)].Selected = true;
-            returningFlights[getRandomInt(returningFlights.length)].Selected = true;
+            var departIndex = getRandomInt(departingFlights.length);
+            var returnIndex = getRandomInt(returningFlights.length);
+
+            departingFlights[departIndex].Selected = true;
+            returningFlights[returnIndex].Selected = true;
         }
 
         res.render('flights/flightResults', {
@@ -118,7 +121,7 @@ app.get('/cars', function (req, res) {
 });
 
 app.post('/cars/search', function (req, res) {
-    var isTest = req.query.IsTest == "True";
+    var isTest = req.body.IsTest == "True";
 
     dataAccess.car.findCars(req.body.StartLocation, req.body.StartDate).then(function (cars) {
         if (isTest) {
@@ -164,7 +167,7 @@ app.get('/hotels', function (req, res) {
 });
 
 app.post('/hotels/search', function (req, res) {
-    var isTest = req.query.IsTest == "True";
+    var isTest = req.body.IsTest == "True";
 
     dataAccess.hotel.findHotels(req.body.StartLocation, req.body.StartDate).then(function (hotels) {
         if (isTest) {
@@ -229,17 +232,22 @@ app.get('/itinerary', function (req, res) {
 
 app.get('/test', function (req, res) {
     var airports = airportDisplayProvider.getAll();
-    var minutesInADay = 60 * 24 * 1000;
+    var minutesInADay = 60 * 24;
     var minutesInAWeek = minutesInADay * 7;
     var minutesInAMonth = minutesInADay * 30;
-    var startDate = new Date(new Date().getTime() + (Math.random() * minutesInAWeek));
+    var startDate = new Date();
+    startDate.setMinutes(startDate.getMinutes() + getRandomInt(minutesInAWeek));
+    var endDate = new Date(startDate);
+    endDate.setMinutes(endDate.getMinutes() + getRandomInt(minutesInAWeek));
+    var purchasedDate = new Date();
+    purchasedDate.setMinutes(purchasedDate.getMinutes() + (-1 * getRandomInt(minutesInAMonth)));
     res.render('test/index', {
         test: {
             DepartFrom: airports[getRandomInt(airports.length)].AirportCode,
             ArriveAt: airports[getRandomInt(airports.length)].AirportCode,
             DepartOn: startDate,
-            ReturnOn: new Date(startDate.getTime() + (Math.random() * minutesInAWeek)),
-            PurchasedOn: new Date(new Date().getTime() + (-1 * Math.random() * minutesInAMonth))
+            ReturnOn: endDate,
+            PurchasedOn: purchasedDate
         }
     });
 });
