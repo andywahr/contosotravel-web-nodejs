@@ -7,7 +7,7 @@
         </h5>
     <% if (ShowPurchase) { %>
         <label class="btn btn-primary input-group-btn float-right">
-            <input type="radio" id="SelectedHotel" name="SelectedHotel" value="<%= hotel.Id %>">Purchase
+            <input type="radio" id="SelectedHotel" name="SelectedHotel" value="<%= hotel.Id %>" <% if (hotel.Selected == true ){ %> checked="checked" <% } %> >Purchase
         </label>
     <% } %>
     </div>
