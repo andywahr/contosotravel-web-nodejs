@@ -2,18 +2,18 @@
 trigger: none
 
 jobs:
-- job: Node_ServiceBus_Function_Build_and_Deploy
+- job: Node_EventGrid_HTTP_Function_Build_and_Deploy
   pool:
     name: Hosted Ubuntu 1604
     demands: 
     - npm
     - node.js
   steps:
-  - task: DeleteFiles@1
-    displayName: 'Delete files from functions/serviceBusFunction/'
-    inputs:
-      SourceFolder: functions/serviceBusFunction/
-      Contents: function.json
+  - bash: |
+     rm -rf mydir serviceBusFunction
+     mv eventGridFunction PurchaseItinerary
+    workingDirectory: functions
+    displayName: 'Rename folder to PurchaseItinerary'
 
   - template: ./build-appservice.yaml
     parameters:
