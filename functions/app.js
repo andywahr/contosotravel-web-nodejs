@@ -37,7 +37,7 @@ if ( whichApp != 'servicebus' )
     var router = express.Router();
     app.use('/api', router);
 
-    router.post('/', function (req, res) {
+    router.post('/PurchaseItinerary', function (req, res) {
         var purchaseItineraryMessage = req.body;
     
         console.log("Starting to finalize purchase of " + purchaseItineraryMessage.cartId);

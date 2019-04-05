@@ -57,3 +57,16 @@ jobs:
       scriptPath: /tmp/arkhitekton-modules/Terraform/ContosoTravel/Kubernetes/configure.bash
       arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/arkhitekton-modules/Terraform/ContosoTravel/backend/kubernetes/webdeploy.yaml'
       workingDirectory: $(Build.sourcesDirectory)
+
+  - task: AzureCLI@1
+    displayName: 'Azure CLI - Running configuration.ps1 and Deploy'
+    inputs:
+      azureSubscription: '${{ variables.ConnectedServiceName_local }}'
+      scriptLocation: inlineScript
+      inlineScript: |
+        sub=(az account show --query id --output tsv)
+        url=(az keyvault secret show --vault-name "kv${{ variables.namePrefix_local }}" --name "ContosoTravel--ServiceFQDN" --query value --output tsv)
+        topicId=(az eventgrid topic list --resource-group rg-{{ variables.namePrefix_local }} --subscription $sub --query [].id --output tsv)
+        az eventgrid event-subscription create --name {{ variables.namePrefix_local }}PurchaseItinerarySub --source-resource-id $topicId --endpoint $url
+      workingDirectory: $(Build.sourcesDirectory)      
+    condition: and(always(), eq(variables['eventing'], 'eventgrid'))    
