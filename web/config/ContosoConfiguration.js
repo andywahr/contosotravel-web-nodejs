@@ -14,6 +14,7 @@ class ContosoConfiguration {
         this.dataAdministratorLoginPassword = "";    
         this.dataAccountPassword = "";
         this.dataAccountUserName = "";
+        this.serviceFQDN = "";
     }
 }   
 

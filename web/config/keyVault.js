@@ -41,7 +41,7 @@ exports.loadConfig = async function(keyVaultAccountName) {
     config.subscriptionId = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--SubscriptionId");
     config.tenantId = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--TenantId");
     config.serviceConnectionString = await getSecret(keyVaultClient, vaultUri, "ContosoTravel--ServiceConnectionString");
-
+    config.serviceFQDN =  await getSecret(keyVaultClient, vaultUri, "ContosoTravel--ServiceFQDN");
     return config;
 }
 
