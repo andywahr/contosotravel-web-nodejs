@@ -8,6 +8,11 @@ jobs:
     demands: 
     - npm
     - node.js
+
+  variables:
+    ConnectedServiceName_local: $(ConnectedServiceName)
+    namePrefix_local: $(namePrefix)
+
   steps:
   - bash: |
      rm -rf mydir serviceBusFunction
@@ -24,11 +29,7 @@ jobs:
     displayName: 'Azure CLI - Running configuration.ps1 and Deploy'
     inputs:
       azureSubscription: '${{ variables.ConnectedServiceName_local }}'
-      scriptLocation: inlineScript
-      inlineScript: |
-        sub=(az account show --query id --output tsv)
-        url=(az keyvault secret show --vault-name "kv${{ variables.namePrefix_local }}" --name "ContosoTravel--ServiceFQDN" --query value --output tsv)
-        topicId=(az eventgrid topic list --resource-group rg-{{ variables.namePrefix_local }} --subscription $sub --query [].id --output tsv)
-        az eventgrid event-subscription create --name {{ variables.namePrefix_local }}PurchaseItinerarySub --source-resource-id $topicId --endpoint $url
+      scriptPath: configEventGrid.bash
+      arguments: $(namePrefix_local)
       workingDirectory: $(Build.sourcesDirectory)      
     condition: and(always(), eq(variables['eventing'], 'eventgrid'))
