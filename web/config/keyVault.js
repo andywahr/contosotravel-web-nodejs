@@ -5,9 +5,15 @@ const msRestAzure = require('ms-rest-azure');
 const ContosoConfiguration = require('./ContosoConfiguration');
 
 async function getSecret(keyVaultClient, vaultUri, secretName) {
-    var secretVal = await keyVaultClient.getSecret(vaultUri, secretName, "");
-    console.log("Secret '" + secretName + "' = '" + secretVal.value + "'.");
-    return secretVal.value;
+    try
+    {
+        var secretVal = await keyVaultClient.getSecret(vaultUri, secretName, "");
+        console.log("Loaded Secret: " + secretName);
+        return secretVal.value;
+    } catch (e) {
+        console.log("Failed to load secret: " + secretName)
+        console.error(e);
+    }
 }
 
 exports.loadConfig = async function(keyVaultAccountName) {
