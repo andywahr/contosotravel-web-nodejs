@@ -17,12 +17,10 @@ steps:
 
 - script: |
     npm install
-    npm run build
   workingDirectory: web
   displayName: 'npm install and build for web'
 
 - script: |
     npm install
-    npm run build
   workingDirectory: functions
   displayName: 'npm install and build for functions'
