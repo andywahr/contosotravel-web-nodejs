@@ -32,10 +32,10 @@ jobs:
       workingDirectory: '$(build.sourcesDirectory)/functions'
 
   - powershell: |
-     $dir = "/tmp/arkhitekton-modules"
+     $dir = "/tmp/contosotravel-web"
      mkdir $dir
      cd $dir
-     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-nodejs', 'arkhitekton-modules')
+     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-nodejs', 'contosotravel-web')
      "$repoUrl"
      git init $dir
      git remote add origin $repoUrl
@@ -54,8 +54,8 @@ jobs:
     displayName: 'Azure CLI - Running configuration.ps1 and Deploy'
     inputs:
       azureSubscription: '${{ variables.ConnectedServiceName_local }}'
-      scriptPath: /tmp/arkhitekton-modules/Terraform/ContosoTravel/Kubernetes/configure.bash
-      arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/arkhitekton-modules/Terraform/ContosoTravel/backend/kubernetes/webdeploy.yaml'
+      scriptPath: /tmp/contosotravel-web/Kubernetes/configure.bash
+      arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/contosotravel-web/backend/kubernetes/webdeploy.yaml'
       workingDirectory: $(Build.sourcesDirectory)
 
   - task: AzureCLI@1
