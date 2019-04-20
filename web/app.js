@@ -33,8 +33,20 @@ app.set('port', port);
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser())
-
 app.set('view engine', 'ejs')
+
+app.use(function(request, response, next) {
+    
+    if ( !request.url.match(/public/i) ) 
+    {
+        // Disable caching for content files
+        response.header("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.header("Pragma", "no-cache");
+        response.header("Expires", 0);
+    }
+
+    next();
+});
 
 app.get('/', function (req, res) {
     res.render('shared/search', {
@@ -173,7 +185,7 @@ app.post('/hotels/search', function (req, res) {
         if (isTest) {
             hotels[getRandomInt(hotels.length)].Selected = true;
         }
-        var duration = ((new Date(req.body.EndDate)) - (new Date(req.body.StartDate))) / (1000 * 60 * 60 * 24);
+        var duration = Math.round(((new Date(req.body.EndDate)) - (new Date(req.body.StartDate))) / (1000 * 60 * 60 * 24));
         res.render('hotels/hotelResults', {
             Hotels: airportDisplayProvider.resolveAirportsForAll(hotels),
             NumberOfDays: duration
@@ -255,7 +267,6 @@ app.get('/test', function (req, res) {
 app.use('/public/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/public/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/public/lib', express.static(path.join(__dirname, 'public/lib')));
-
 
 configPromise.then(function (contosoConfig) {
 
