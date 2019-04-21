@@ -54,5 +54,5 @@ jobs:
     inputs:
       azureSubscription: '${{ variables.ConnectedServiceName_local }}'
       scriptPath: /tmp/contosotravel-web/Kubernetes/configure.bash
-      arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/contosotravel-web/web/websitekubernetes/webdeploy.yaml'
+      arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/contosotravel-web/web/websitekubernetes/webdeploy.yaml $(build.buildId) contosotravel-web contoso-travel-web contosotravel-web'
       workingDirectory: $(Build.sourcesDirectory)

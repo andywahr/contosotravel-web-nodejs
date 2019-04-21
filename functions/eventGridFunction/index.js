@@ -1,7 +1,14 @@
 
 const appInsights = require("applicationinsights");
-appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
-appInsights.start();
+appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
+           .setAutoDependencyCorrelation(true)
+           .setAutoCollectRequests(true)
+           .setAutoCollectPerformance(true)
+           .setAutoCollectExceptions(true)
+           .setAutoCollectDependencies(true)
+           .setAutoCollectConsole(true)
+           .setUseDiskRetryCaching(true)
+           .start();
 
 const FulfillmentService =  require('../services/fulfillmentService');
 const DataAccess = require('../dataAccess/dataAccessProvider');

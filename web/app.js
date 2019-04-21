@@ -1,6 +1,13 @@
 const appInsights = require("applicationinsights");
-appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
-appInsights.start();
+appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
+           .setAutoDependencyCorrelation(true)
+           .setAutoCollectRequests(true)
+           .setAutoCollectPerformance(true)
+           .setAutoCollectExceptions(true)
+           .setAutoCollectDependencies(true)
+           .setAutoCollectConsole(true)
+           .setUseDiskRetryCaching(true)
+           .start();
 
 var express = require('express');
 var cookieParser = require('cookie-parser')
