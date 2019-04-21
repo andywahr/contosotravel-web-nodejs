@@ -9,7 +9,7 @@ class CosmosDbFlight{
     };
 
     async init() {
-        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Flights", ["/DepartingFrom", "/ArrivingAt", "/DepartureTimeEpoc", "/ArrivingTimeEpoc"]);
+        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Flights", ["DepartingFrom", "ArrivingAt", "DepartureTimeEpoc", "ArrivingTimeEpoc"]);
         await this.cosmosDbClient.init();
     };
     
