@@ -9,7 +9,7 @@ class CosmosDbItinerary{
     };
 
     async init() {
-        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Itineraries");
+        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Itineraries", [ "/RecordLocator" ]);
         await this.cosmosDbClient.init();
     };
     

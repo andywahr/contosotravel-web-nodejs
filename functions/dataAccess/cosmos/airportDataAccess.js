@@ -9,7 +9,7 @@ class CosmosDbAirport{
     };
 
     async init() {
-        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Airports");
+        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Airports", []);
         await this.cosmosDbClient.init();
         this.allAirports = await this.cosmosDbClient.find();
     };

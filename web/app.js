@@ -78,8 +78,8 @@ app.get('/flights', function (req, res) {
 
 app.post('/flights/search', function (req, res) {
     var isTest = req.body.IsTest == "True";
-    var startingFlight = dataAccess.flight.findFlights(req.body.StartLocation, req.body.EndLocation, req.body.StartDate, 3);
-    var endingFlight = dataAccess.flight.findFlights(req.body.EndLocation, req.body.StartLocation, req.body.EndDate, 3);
+    var startingFlight = dataAccess.flight.findFlights(req.body.StartLocation, req.body.EndLocation, req.body.StartDate, 6);
+    var endingFlight = dataAccess.flight.findFlights(req.body.EndLocation, req.body.StartLocation, req.body.EndDate, 6);
 
     Promise.all([startingFlight, endingFlight]).then(function (values) {
 

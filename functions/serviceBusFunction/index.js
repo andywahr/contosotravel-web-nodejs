@@ -1,4 +1,8 @@
 
+const appInsights = require("applicationinsights");
+appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY);
+appInsights.start();
+
 const FulfillmentService =  require('../services/fulfillmentService');
 const DataAccess = require('../dataAccess/dataAccessProvider');
 

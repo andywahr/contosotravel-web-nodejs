@@ -1,10 +1,12 @@
+const cosmos = require("@azure/cosmos");
 
 class CosmosHelper {
 
-  constructor(cosmosClient, cosmosConfig, containerId) {
+  constructor(cosmosClient, cosmosConfig, containerId, indexes) {
     this.client = cosmosClient;
     this.databaseId = cosmosConfig.databaseName;
     this.collectionId = containerId;
+    this.indexes = indexes;
     this.debug = function (msg) { console.log(msg); };
 
     this.database = null;
@@ -19,8 +21,42 @@ class CosmosHelper {
     this.database = dbResponse.database;
     this.debug("Setting up the database...done!");
     this.debug("Setting up the container...");
+    var indexDefs = [
+      {
+        kind: cosmos.DocumentBase.IndexKind.Hash,
+        dataType: cosmos.DocumentBase.DataType.String,
+        precision: -1
+      },
+      {
+        kind: cosmos.DocumentBase.IndexKind.Hash,
+        dataType: cosmos.DocumentBase.DataType.Number,
+        precision: -1
+      }
+    ];
+
+    var includePaths = [];
+
+    for (var ii = 0; ii < this.indexes.length; ii++) {
+      var index = this.indexes[ii];
+      includePaths.push({
+        path: `/${index}/?`,
+        indexes: indexDefs
+      });
+    }
+
+    var indexPolicySpec = {
+      includedPaths: includePaths,
+      excludedPaths: [
+        {
+          path: "/*"
+        }
+      ],
+      automatic : false
+    };
+
     const coResponse = await this.database.containers.createIfNotExists({
-      id: this.collectionId
+      id: this.collectionId,
+      indexingPolicy: indexPolicySpec
     });
     this.container = coResponse.container;
     this.debug("Setting up the container...done!");

@@ -15,6 +15,7 @@ var app = express();
 var dataAccess = '';
 var sbService = '';
 var whichApp = 'serviceHttp';
+var sbInterval = undefined;
 
 console.log("ARG Count: " + process.argv.length);
 
@@ -77,7 +78,7 @@ configPromise.then(function(contosoConfig) {
         {
             console.log('Connecting to ' + process.env.ConnectionStrings__ServiceBusConnection);
             sbService = azureSB.createServiceBusService(process.env.ConnectionStrings__ServiceBusConnection);             
-            setInterval(checkForMessages.bind(null, sbService, 'PurchaseItinerary', processMessage.bind(null, sbService)), 5000);
+            sbInterval = setInterval(checkForMessages.bind(null, sbService, 'PurchaseItinerary', processMessage.bind(null, sbService)), 5000);
         }
     }).catch(function(error) {
         console.log(error);
@@ -118,14 +119,17 @@ function normalizePort(val) {
   }
 
   function checkForMessages(sbService, queueName, callback) {
+    clearInterval(sbInterval);
     sbService.receiveQueueMessage(queueName, { isPeekLock: true }, function (err, lockedMessage) {
       if (err) {
+        setInterval(checkForMessages.bind(null, sbService, 'PurchaseItinerary', processMessage.bind(null, sbService)), 5000);
         if (err == 'No messages to receive') {
           console.log('No messages');
         } else {
           callback(err);
         }
       } else {
+        setInterval(checkForMessages.bind(null, sbService, 'PurchaseItinerary', processMessage.bind(null, sbService)), 100);
         callback(null, lockedMessage);
       }
     });

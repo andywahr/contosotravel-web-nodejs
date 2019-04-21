@@ -10,7 +10,7 @@ class CosmosDbCart{
     };
 
     async init() {
-        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Carts");
+        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Carts", []);
         await this.cosmosDbClient.init();
     };
     

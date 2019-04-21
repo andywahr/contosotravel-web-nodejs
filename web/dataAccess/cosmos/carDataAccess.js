@@ -9,7 +9,7 @@ class CosmosDbCar{
     };
 
     async init() {
-        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Cars");
+        this.cosmosDbClient = new CosmosHelper(this.cosmosClient, this.contosoConfig, "Cars", [ "/Location", "/StartingTimeEpoc", "/EndingTimeEpoc" ]);
         await this.cosmosDbClient.init();
     };
     
