@@ -13,12 +13,14 @@ appInsights.setup(process.env.APPINSIGHTS_INSTRUMENTATIONKEY)
 const FulfillmentService = require('./services/fulfillmentService');
 var express = require('express');
 var http = require('http');
+var bodyParser = require('body-parser');
 var DataAccess = require('./dataAccess/dataAccessProvider');
 var config = require('./config/keyVault');
 var configPromise = config.loadConfig(process.env.KeyVaultAccountName);
 const azureSB = require('azure-sb');
 
 var app = express();
+app.use(bodyParser.json())
 var dataAccess = '';
 var sbService = '';
 var whichApp = 'serviceHttp';
