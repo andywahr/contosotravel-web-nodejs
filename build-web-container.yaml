@@ -60,7 +60,7 @@ jobs:
       scriptLocation: inlineScript
       inlineScript: |
          az aks get-credentials --subscription $SubscriptionId_local --resource-group $ResourceGroupName --name $AKSName --overwrite-existing
-         kubectl apply -f webdeploy.yaml
+         kubectl apply -f webDeploy.yaml
          kubectl set image deployments/contosotravel-web $ImageExpr
     env:
       NamePrefix_local: $(NamePrefix_local)
