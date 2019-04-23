@@ -29,30 +29,42 @@ jobs:
       includeLatestTag: true
       imageName: 'acrcontosotravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-travel-web:$(Build.BuildId)'
       workingDirectory: '$(build.sourcesDirectory)/web'
-
-  - powershell: |
-     $dir = "/tmp/contosotravel-web"
-     mkdir $dir
-     cd $dir
-     $repoUrl = $env:REPO_URI.Replace('contosotravel-web-nodejs', 'contosotravel-web')
-     "$repoUrl"
-     git init $dir
-     git remote add origin $repoUrl
-     git config gc.auto 0
-     git config --get-all "http.$($repoUrl).extraheader"
-     git config --get-all http.proxy
-     git -c http.extraheader="AUTHORIZATION: bearer $env:SYSTEM_ACCESSTOKEN" fetch --tags --prune --progress --no-recurse-submodules origin
-     git checkout origin/master
-     ls $dir/*
-    env:
-      SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-      REPO_URI: $(Build.Repository.Uri)
-    displayName: 'Get latest on modules repo'
- 
+  
   - task: AzureCLI@1
-    displayName: 'Azure CLI - Running configuration.ps1 and Deploy'
+    displayName: 'Azure CLI - Set Variables for Kubernetes'
     inputs:
       azureSubscription: '${{ variables.ConnectedServiceName_local }}'
-      scriptPath: /tmp/contosotravel-web/Kubernetes/configure.bash
-      arguments: 'rg-${{ variables.NamePrefix_local }} ${{ variables.SubscriptionId_local }} ${{ variables.NamePrefix_local }} /tmp/contosotravel-web/web/websitekubernetes/webdeploy.yaml $(build.buildId) contosotravel-web contoso-travel-web contosotravel-web'
-      workingDirectory: $(Build.sourcesDirectory)
+      scriptLocation: inlineScript
+      inlineScript: |
+        appInsightsKey=$(az resource show --resource-group $ResourceGroupName --subscription $SubscriptionId_local --resource-type Microsoft.Insights/components --name $AppInsightsName --query "properties.InstrumentationKey"  --out tsv )
+        dnsZone=$(az aks show --resource-group $ResourceGroupName  --subscription $SubscriptionId_local --name $AKSName --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName  --out tsv )
+        echo "##vso[task.setvariable variable=appInsightsKey;isOutput=true]$appInsightsKey"
+        echo "##vso[task.setvariable variable=dnsZone;isOutput=true]$dnsZone"
+    env:
+      NamePrefix_local: $(NamePrefix_local)
+      SubscriptionId_local: $(SubscriptionId_local)
+      ResourceGroupName: rg-${{ variables.NamePrefix_local }}
+      AppInsightsName: ${{ variables.NamePrefix_local }}appInsightContosoTravel
+      AKSName: aks-ContosoTravel-${{ variables.NamePrefix_local }}
+    name: 'azureValues'
+
+  - task: replacetokens@3
+    displayName: 'Replace tokens in webDeploy.yaml'
+    inputs:
+      targetFiles: webDeploy.yaml
+  
+  - task: AzureCLI@1
+    displayName: 'Azure CLI - Deploy Web to Kubernetes'
+    inputs:
+      azureSubscription: '${{ variables.ConnectedServiceName_local }}'
+      scriptLocation: inlineScript
+      inlineScript: |
+         az aks get-credentials --subscription $SubscriptionId_local --resource-group $ResourceGroupName --name $AKSName --overwrite-existing
+         kubectl apply -f webdeploy.yaml
+         kubectl set image deployments/contosotravel-web $ImageExpr
+    env:
+      NamePrefix_local: $(NamePrefix_local)
+      SubscriptionId_local: $(SubscriptionId_local)
+      ResourceGroupName: rg-${{ variables.NamePrefix_local }}
+      AKSName: aks-ContosoTravel-${{ variables.NamePrefix_local }}
+      ImageExpr: contosotravel-web=acrContosoTravel${{ variables.NamePrefix_local }}.azurecr.io/contoso-web:$(Build.BuildId)
